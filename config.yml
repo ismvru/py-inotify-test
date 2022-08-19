@@ -1,0 +1,10 @@
+---
+watch:
+  - /tmp
+
+events:
+  - "IN_MODIFY"
+  - "IN_CLOSE_WRITE"
+  - "IN_CREATE"
+  - "IN_DELETE"
+  - "IN_DELETE_SELF"
