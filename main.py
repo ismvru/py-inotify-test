@@ -64,10 +64,14 @@ class Watchers:
 
         Watches for all directories in self.watch_dirs
         Calls event_handler for all events in self.watch_events"""
+        logger.info("Init new inotify adapter")
+
         i = inotify.adapters.Inotify()
+
         for dir in self.watch_dirs:
             logger.info(f"Adding inotify_tree_watcher to {dir}")
             i.add_watch(dir)
+
         for event in i.event_gen(yield_nones=False):
             (_, event_list, path, filename) = event
             logger.debug(f"Captured new event: {event_list} on {path}/{filename}")
@@ -97,9 +101,11 @@ class Watchers:
 
 
 if __name__ == "__main__":
+
     try:
         logger.info("Start python inotify event handler")
         logger.info("Loading configuration...")
+
         # Read config file
         try:
             with open("config.yml", "r") as config_file:
@@ -116,6 +122,7 @@ if __name__ == "__main__":
         loop = uvloop.new_event_loop()
         loop.create_task(w.inotify_watcher())
         loop.run_forever()
+
     except KeyboardInterrupt:
         # If Ctrl+C Pressed - exit.
         logger.info("KeyboardInterrupt")
